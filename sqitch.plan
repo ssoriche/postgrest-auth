@@ -2,3 +2,4 @@
 %project=postgrest-auth
 %uri=https://github.com/ssoriche/postgrest-auth/
 
+setup 2015-12-28T21:40:57Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # setup database for authentication
