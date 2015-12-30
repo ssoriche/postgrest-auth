@@ -4,3 +4,4 @@
 
 setup 2015-12-28T21:40:57Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # setup database for authentication
 devise_test 2015-12-29T02:28:36Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # setup database for Devise layout
+auth_schema 2015-12-30T03:36:42Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add auth schema to hold auth objects
