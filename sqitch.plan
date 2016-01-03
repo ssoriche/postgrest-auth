@@ -6,3 +6,4 @@ setup 2015-12-28T21:40:57Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org>
 devise_test 2015-12-29T02:28:36Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # setup database for Devise layout
 auth_schema 2015-12-30T03:36:42Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add auth schema to hold auth objects
 users_base_view [auth_schema] 2015-12-30T22:09:21Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add a base users view to build from
+users_view [users_base_view] 2016-01-03T01:38:00Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add a users view to be used for authentication
