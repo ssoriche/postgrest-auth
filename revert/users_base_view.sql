@@ -2,6 +2,6 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
+  DROP VIEW auth.users_base;
 
 COMMIT;
