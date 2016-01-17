@@ -5,30 +5,31 @@ BEGIN;
 
   CREATE OR REPLACE VIEW auth.users AS
     SELECT
-        id,
-        username,
-        facebook_token,
-        email,
-        encrypted_password,
-        reset_password_token,
-        reset_password_sent_at,
-        remember_created_at,
-        sign_in_count,
-        current_sign_in_at,
-        last_sign_in_at,
-        current_sign_in_ip,
-        last_sign_in_ip,
-        confirmation_token,
-        confirmed_at,
-        confirmation_sent_at,
-        failed_attempts,
-        unlock_token,
-        locked_at,
-        'member'::name AS role,
-        created_at,
-        updated_at
-      FROM auth.users_base
-      WITH CHECK OPTION
+        base.id,
+        base.username,
+        base.facebook_token,
+        base.email,
+        base.encrypted_password,
+        base.reset_password_token,
+        base.reset_password_sent_at,
+        base.remember_created_at,
+        base.sign_in_count,
+        base.current_sign_in_at,
+        base.last_sign_in_at,
+        base.current_sign_in_ip,
+        base.last_sign_in_ip,
+        base.confirmation_token,
+        base.confirmed_at,
+        base.confirmation_sent_at,
+        base.failed_attempts,
+        base.unlock_token,
+        base.locked_at,
+        role.role AS role,
+        base.created_at,
+        base.updated_at
+      FROM auth.users_base base
+      INNER JOIN auth.user_roles role
+        ON base.id = role.user_id
   ;
 
 COMMIT;
