@@ -9,7 +9,7 @@ BEGIN;
         base.username,
         base.facebook_token,
         base.email,
-        base.encrypted_password,
+        base.pass,
         base.reset_password_token,
         base.reset_password_sent_at,
         base.remember_created_at,

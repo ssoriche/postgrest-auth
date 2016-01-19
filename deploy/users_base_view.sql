@@ -9,7 +9,7 @@ BEGIN;
         username,
         facebook_token,
         email,
-        encrypted_password,
+        encrypted_password AS pass,
         reset_password_token,
         reset_password_sent_at,
         remember_created_at,
