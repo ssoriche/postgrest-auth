@@ -87,4 +87,15 @@ BEGIN;
       auth.users FOR EACH ROW EXECUTE PROCEDURE auth.users_change()
   ;
 
+  CREATE OR REPLACE FUNCTION
+      auth.user_role(username text, pass text) RETURNS name AS $$
+    BEGIN
+      RETURN (
+      SELECT role FROM auth.users
+       WHERE users.username = user_role.username
+         AND users.pass = crypt(user_role.pass, users.pass)
+      );
+    END;
+  $$ LANGUAGE plpgsql;
+
 COMMIT;

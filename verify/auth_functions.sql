@@ -2,6 +2,6 @@
 
 BEGIN;
 
--- XXX Add verifications here.
+  SELECT has_function_privilege('auth.user_role(text, text)', 'execute');
 
 ROLLBACK;

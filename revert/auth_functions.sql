@@ -6,4 +6,6 @@ BEGIN;
   DROP TRIGGER IF EXISTS ensure_user_user_exists ON auth.user_roles;
   DROP TRIGGER IF EXISTS users_trigger on auth.users;
 
+  DROP FUNCTION IF EXISTS auth.user_role(text, text);
+
 COMMIT;
