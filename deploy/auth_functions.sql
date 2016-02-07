@@ -43,17 +43,14 @@ BEGIN;
     execute procedure auth.check_user_exists()
   ;
 
-  CREATE OR REPLACE FUNCTION auth.users_change() RETURNS trigger AS $auth_users$
+  CREATE OR REPLACE FUNCTION auth.users_add() RETURNS trigger AS $auth_users_add$
     DECLARE
       inputstring TEXT;
       new_record RECORD;
       ret RECORD;
-    BEGIN        
-      IF tg_op = 'INSERT' or new.pass <> old.pass THEN
-        new.pass = crypt(new.pass, gen_salt('bf'));
-      END IF;
-
+    BEGIN
       IF tg_op = 'INSERT' THEN
+        new.pass = crypt(new.pass, gen_salt('bf'));
         new.created_at = CURRENT_TIMESTAMP;
         new.updated_at = CURRENT_TIMESTAMP;
 
@@ -79,12 +76,12 @@ BEGIN;
 
       RETURN NEW;
     END;
-  $auth_users$ LANGUAGE plpgsql;
+  $auth_users_add$ LANGUAGE plpgsql;
 
-  DROP TRIGGER IF EXISTS users_trigger on auth.users;
-  CREATE TRIGGER users_trigger
-    INSTEAD OF INSERT OR UPDATE OR DELETE ON
-      auth.users FOR EACH ROW EXECUTE PROCEDURE auth.users_change()
+  DROP TRIGGER IF EXISTS users_add_trigger on auth.users;
+  CREATE TRIGGER users_add_trigger
+    INSTEAD OF INSERT ON
+      auth.users FOR EACH ROW EXECUTE PROCEDURE auth.users_add()
   ;
 
   CREATE OR REPLACE FUNCTION
