@@ -84,6 +84,31 @@ BEGIN;
       auth.users FOR EACH ROW EXECUTE PROCEDURE auth.users_add()
   ;
 
+  CREATE OR REPLACE FUNCTION auth.users_change() RETURNS trigger AS $auth_users_change$
+    DECLARE
+      inputstring TEXT;
+      new_record RECORD;
+      ret RECORD;
+    BEGIN
+      IF tg_op = 'UPDATE' or new.pass <> old.pass THEN
+        IF new.reset_password_token != old.reset_password_token THEN
+          new.reset_password_sent_at = CURRENT_TIMESTAMP;
+        END IF;
+        IF new.confirmation_token != old.confirmation_token THEN
+          new.confirmation_sent_at = CURRENT_TIMESTAMP;
+        END IF;
+      END IF;
+
+    END;
+  $auth_users_change$ LANGUAGE plpgsql;
+
+  DROP TRIGGER IF EXISTS auth_users_change ON auth.users_attributes_base;
+  CREATE CONSTRAINT TRIGGER auth_users_change
+    BEFORE DELETE or UPDATE on auth.users_attributes_base
+    FOR EACH ROW
+    EXECUTE PROCEDURE auth.users_change()
+  ;
+
   CREATE OR REPLACE FUNCTION
       auth.user_role(username text, pass text) RETURNS name AS $$
     BEGIN
