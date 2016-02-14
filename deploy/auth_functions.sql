@@ -143,4 +143,24 @@ BEGIN;
     END;
   $$ LANGUAGE plpgsql;
 
+  CREATE OR REPLACE FUNCTION auth.request_password_reset(identifier TEXT) RETURNS VOID AS $$
+    BEGIN
+      UPDATE auth.users
+        SET reset_password_token = gen_random_uuid()
+        WHERE request_password_reset.identifier IN (username, email)
+      ;
+
+      PERFORM pg_notify('reset',
+            json_build_object(
+              'email', email,
+              'token', reset_password_token,
+              'token_type', 'reset'
+            )::text
+          )
+        FROM auth.users_attributes_base
+        WHERE request_password_reset.identifier IN (username, email)
+      ;
+    END;
+  $$ LANGUAGE plpgsql;
+
 COMMIT;
