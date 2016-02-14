@@ -64,7 +64,7 @@ BEGIN;
         ;
 
         EXECUTE 'INSERT INTO auth.users_base '
-          || '(' || inputstring || ') SELECT ' ||  inputstring 
+          || '(' || inputstring || ') SELECT ' ||  inputstring
           || ' FROM json_populate_record( NULL::auth.users_attributes_base, to_json($1)) RETURNING *'
           INTO ret USING new_record
         ;
