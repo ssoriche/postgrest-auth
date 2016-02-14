@@ -103,6 +103,9 @@ BEGIN;
         new.last_sign_in_ip = old.current_sign_in_ip;
         new.current_sign_in_at = CURRENT_TIMESTAMP;
       END IF;
+      IF new.pass != old.pass THEN
+        new.pass = crypt(new.pass, gen_salt('bf'));
+      END IF;
 
       new.updated_at = CURRENT_TIMESTAMP;
 
