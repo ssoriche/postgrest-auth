@@ -63,6 +63,20 @@ BEGIN;
           FROM json_object_keys(to_json(new_record)) AS X (key)
         ;
 
+        IF EXISTS ( SELECT 1 FROM json_each_text(to_json(new_record)) AS X WHERE key = 'confirmation_token') THEN
+          new_record.confirmation_token = uuid_generate_v4();
+          new_record.confirmation_sent_at = CURRENT_TIMESTAMP;
+
+          PERFORM pg_notify('validate',
+            json_build_object(
+              'email', new_record.email,
+              'token', new_record.confirmation_token,
+              'token_type', 'validation'
+            )::text
+          );
+
+        END IF;
+
         EXECUTE 'INSERT INTO auth.users_base '
           || '(' || inputstring || ') SELECT ' ||  inputstring
           || ' FROM json_populate_record( NULL::auth.users_attributes_base, to_json($1)) RETURNING *'
