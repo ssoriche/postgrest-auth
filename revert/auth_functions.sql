@@ -11,5 +11,6 @@ BEGIN;
   DROP FUNCTION IF EXISTS auth.users_add();
   DROP FUNCTION IF EXISTS auth.users_change();
   DROP FUNCTION IF EXISTS auth.request_password_reset(TEXT);
+  DROP FUNCTION IF EXISTS auth.reset_password(TEXT, UUID, TEXT);
 
 COMMIT;

@@ -166,4 +166,24 @@ BEGIN;
     END;
   $$ LANGUAGE plpgsql;
 
+  CREATE OR REPLACE FUNCTION auth.reset_password(identifier TEXT, token UUID, pass TEXT) RETURNS VOID AS $$
+    BEGIN
+      IF EXISTS(
+        SELECT 1 from auth.users
+        WHERE reset_password.identifier IN (username, email)
+          AND reset_password_token::UUID = reset_password.token
+      ) THEN
+        UPDATE auth.users
+          SET pass = reset_password.pass,
+            reset_password_token = NULL,
+            reset_password_sent_at = NULL
+          WHERE reset_password.identifier IN (username, email)
+            AND reset_password_token::UUID = reset_password.token
+        ;
+      ELSE
+        RAISE invalid_password USING message = 'invalid user or token';
+      END IF;
+    END;
+  $$ LANGUAGE plpgsql;
+
 COMMIT;
