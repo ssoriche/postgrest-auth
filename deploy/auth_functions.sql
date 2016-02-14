@@ -90,6 +90,18 @@ BEGIN;
       new_record RECORD;
       ret RECORD;
     BEGIN
+      IF new.username != old.username THEN
+        IF EXISTS (SELECT 1 FROM auth.users WHERE username = new.username) THEN
+          RAISE foreign_key_violation USING message = 'Invalid user name: ' || new.username;
+        END IF;
+      END IF;
+
+      IF new.email != old.email THEN
+        IF EXISTS (SELECT 1 FROM auth.users WHERE email = new.email) THEN
+          RAISE foreign_key_violation USING message = 'Invalid email address: ' || new.email;
+        END IF;
+      END IF;
+
       IF new.reset_password_token != old.reset_password_token
         OR new.reset_password_token IS NOT NULL and old.reset_password_token IS NULL
       THEN
