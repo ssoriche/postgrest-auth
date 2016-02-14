@@ -78,8 +78,8 @@ BEGIN;
     END;
   $auth_users_add$ LANGUAGE plpgsql;
 
-  DROP TRIGGER IF EXISTS users_add_trigger on auth.users;
-  CREATE TRIGGER users_add_trigger
+  DROP TRIGGER IF EXISTS auth_users_add on auth.users;
+  CREATE TRIGGER auth_users_add
     INSTEAD OF INSERT ON
       auth.users FOR EACH ROW EXECUTE PROCEDURE auth.users_add()
   ;
