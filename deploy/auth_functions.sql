@@ -212,4 +212,8 @@ BEGIN;
     END;
   $$ LANGUAGE plpgsql;
 
+  CREATE OR REPLACE FUNCTION auth.signup(username TEXT, email TEXT, pass TEXT, role TEXT) RETURNS VOID AS $$
+    INSERT INTO auth.users (username, email, pass, role) values (signup.username, signup.email, signup.pass, signup.role);
+  $$ LANGUAGE SQL;
+
 COMMIT;
