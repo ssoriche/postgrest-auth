@@ -162,11 +162,11 @@ BEGIN;
   ;
 
   CREATE OR REPLACE FUNCTION
-      auth.user_role(username text, pass text) RETURNS name AS $$
+      auth.user_role(identifier text, pass text) RETURNS name AS $$
     BEGIN
       RETURN (
       SELECT role FROM auth.users
-       WHERE users.username = user_role.username
+       WHERE user_role.identifier IN (users.username, users.email)
          AND users.pass = crypt(user_role.pass, users.pass)
       );
     END;
