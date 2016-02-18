@@ -134,7 +134,7 @@ BEGIN;
       IF new.confirmation_token != old.confirmation_token THEN
         new.confirmation_sent_at = CURRENT_TIMESTAMP;
       END IF;
-      IF new.sign_in_count != old.sign_in_count THEN
+      IF new.sign_in_count != old.sign_in_count OR (new.sign_in_count IS NOT NULL AND old.sign_in_count IS NULL) THEN
         new.last_sign_in_at = old.current_sign_in_at;
         new.last_sign_in_ip = old.current_sign_in_ip;
         new.current_sign_in_at = CURRENT_TIMESTAMP;

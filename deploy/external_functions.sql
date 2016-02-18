@@ -34,6 +34,11 @@ BEGIN;
         RAISE invalid_password USING message = 'invalid user or password';
       END IF;
 
+      UPDATE auth.users
+        SET sign_in_count = COALESCE(sign_in_count,0) + 1
+        WHERE users.id = result.user_id
+      ;
+
       RETURN result;
     END;
   $$ language plpgsql;
