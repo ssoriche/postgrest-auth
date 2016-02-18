@@ -50,6 +50,15 @@ BEGIN;
       ret RECORD;
     BEGIN
       IF tg_op = 'INSERT' THEN
+
+        IF EXISTS (SELECT 1 FROM auth.users WHERE username = new.username) THEN
+          RAISE foreign_key_violation USING message = 'Invalid user name: ' || new.username;
+        END IF;
+
+        IF EXISTS (SELECT 1 FROM auth.users WHERE email = new.email) THEN
+          RAISE foreign_key_violation USING message = 'Invalid email address: ' || new.email;
+        END IF;
+
         new.pass = crypt(new.pass, gen_salt('bf'));
         new.created_at = CURRENT_TIMESTAMP;
         new.updated_at = CURRENT_TIMESTAMP;
