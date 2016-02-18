@@ -93,9 +93,11 @@ BEGIN;
           INTO ret USING new_record
         ;
 
-        INSERT INTO auth.user_roles (user_id, role)
-          VALUES (ret.ID, NEW.role)
-        ;
+        IF NOT EXISTS ( SELECT 1 FROM json_each_text(to_json(new_record)) AS X WHERE key = 'role') THEN
+          INSERT INTO auth.user_roles (user_id, role)
+            VALUES (ret.ID, NEW.role)
+          ;
+        END IF;
       END IF;
 
       RETURN NEW;
