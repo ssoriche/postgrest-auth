@@ -7,8 +7,5 @@ BEGIN;
   SELECT has_function_privilege('auth.users_add()', 'execute');
   SELECT has_function_privilege('auth.users_change()', 'execute');
   SELECT has_function_privilege('auth.user_role(text, text)', 'execute');
-  SELECT has_function_privilege('auth.request_password_reset(text)', 'execute');
-  SELECT has_function_privilege('auth.reset_password(text,uuid,text)', 'execute');
-  SELECT has_function_privilege('auth.signup(text,text,text,text)', 'execute');
 
 ROLLBACK;

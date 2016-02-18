@@ -182,50 +182,6 @@ BEGIN;
     END;
   $$ LANGUAGE plpgsql;
 
-  CREATE OR REPLACE FUNCTION auth.request_password_reset(identifier TEXT) RETURNS VOID AS $$
-    BEGIN
-      UPDATE auth.users
-        SET reset_password_token = gen_random_uuid()
-        WHERE request_password_reset.identifier IN (username, email)
-      ;
-
-      PERFORM pg_notify('reset',
-            json_build_object(
-              'email', email,
-              'token', reset_password_token,
-              'token_type', 'reset'
-            )::text
-          )
-        FROM auth.users_attributes_base
-        WHERE request_password_reset.identifier IN (username, email)
-      ;
-    END;
-  $$ LANGUAGE plpgsql;
-
-  CREATE OR REPLACE FUNCTION auth.reset_password(identifier TEXT, token UUID, pass TEXT) RETURNS VOID AS $$
-    BEGIN
-      IF EXISTS(
-        SELECT 1 from auth.users
-        WHERE reset_password.identifier IN (username, email)
-          AND reset_password_token::UUID = reset_password.token
-      ) THEN
-        UPDATE auth.users
-          SET pass = reset_password.pass,
-            reset_password_token = NULL,
-            reset_password_sent_at = NULL
-          WHERE reset_password.identifier IN (username, email)
-            AND reset_password_token::UUID = reset_password.token
-        ;
-      ELSE
-        RAISE invalid_password USING message = 'invalid user or token';
-      END IF;
-    END;
-  $$ LANGUAGE plpgsql;
-
-  CREATE OR REPLACE FUNCTION auth.signup(username TEXT, email TEXT, pass TEXT, role TEXT) RETURNS VOID AS $$
-    INSERT INTO auth.users (username, email, pass, role) values (signup.username, signup.email, signup.pass, signup.role);
-  $$ LANGUAGE SQL;
-
   DROP TYPE IF EXISTS auth.jwt_claims CASCADE;
   CREATE TYPE auth.jwt_claims AS (role TEXT, user_id INTEGER, username TEXT, email TEXT, exp BIGINT);
 
