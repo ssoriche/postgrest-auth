@@ -1,5 +1,5 @@
 -- Deploy postgrest-auth:external_functions to pg
--- requires: auth_functions
+-- requires: internal_functions
 
 BEGIN;
 

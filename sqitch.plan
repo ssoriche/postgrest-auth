@@ -8,5 +8,5 @@ auth_schema 2015-12-30T03:36:42Z Shawn Sorichetti <ssoriche@Ravage.hide.sackhead
 users_base_view [auth_schema] 2015-12-30T22:09:21Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add a base users view to build from
 user_roles [users_base_view auth_schema] 2016-01-17T00:06:33Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add user_roles table to add a role to the users table
 users_view [users_base_view user_roles] 2016-01-03T01:38:00Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add a users view to be used for authentication
-auth_functions [users_view] 2016-01-17T00:45:02Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add functions to deal with authentication
-external_functions [auth_functions] 2016-02-15T19:06:15Z Shawn Sorichetti <ssoriche@Ravage.coloredblocks.net> # Add login specific function
+internal_functions [users_view] 2016-01-17T00:45:02Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add functions to deal with authentication
+external_functions [internal_functions] 2016-02-15T19:06:15Z Shawn Sorichetti <ssoriche@Ravage.coloredblocks.net> # Add login specific function
