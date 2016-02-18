@@ -1,6 +1,7 @@
 -- Deploy postgrest-auth:devise_test to pg
 
 BEGIN;
+  SET client_min_messages TO WARNING;
 
   CREATE SCHEMA IF NOT EXISTS devise_test;
 

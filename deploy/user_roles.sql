@@ -3,6 +3,7 @@
 -- requires: auth_schema
 
 BEGIN;
+  SET client_min_messages TO WARNING;
 
   CREATE TABLE IF NOT EXISTS auth.user_roles (
     id SERIAL,

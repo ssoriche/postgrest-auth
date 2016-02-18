@@ -2,6 +2,7 @@
 -- requires: internal_functions
 
 BEGIN;
+  SET client_min_messages TO WARNING;
 
   CREATE OR REPLACE FUNCTION auth.login(identifier TEXT, pass TEXT, exp INTEGER=NULL) RETURNS auth.jwt_claims AS $$
     DECLARE

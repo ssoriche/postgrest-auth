@@ -2,6 +2,7 @@
 -- requires: users_base_view
 
 BEGIN;
+  SET client_min_messages TO WARNING;
 
   CREATE OR REPLACE FUNCTION auth.check_role_exists() RETURNS trigger
     language plpgsql

@@ -2,6 +2,7 @@
 -- requires: users_base_view
 
 BEGIN;
+  SET client_min_messages TO WARNING;
 
   CREATE OR REPLACE VIEW auth.users AS
     SELECT
