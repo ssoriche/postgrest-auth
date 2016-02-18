@@ -13,5 +13,6 @@ BEGIN;
   DROP FUNCTION IF EXISTS auth.request_password_reset(TEXT);
   DROP FUNCTION IF EXISTS auth.reset_password(TEXT, UUID, TEXT);
   DROP FUNCTION IF EXISTS auth.signup(TEXT, TEXT, TEXT, TEXT);
+  DROP TYPE IF EXISTS auth.jwt_claims CASCADE;
 
 COMMIT;

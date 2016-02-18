@@ -225,4 +225,7 @@ BEGIN;
     INSERT INTO auth.users (username, email, pass, role) values (signup.username, signup.email, signup.pass, signup.role);
   $$ LANGUAGE SQL;
 
+  DROP TYPE IF EXISTS auth.jwt_claims CASCADE;
+  CREATE TYPE auth.jwt_claims AS (role TEXT, user_id INTEGER, username TEXT, email TEXT, exp BIGINT);
+
 COMMIT;
