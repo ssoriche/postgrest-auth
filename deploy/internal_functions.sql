@@ -162,6 +162,19 @@ BEGIN;
         USING OLD.id
       ;
 
+      IF NOT EXISTS (
+        SELECT 1
+          FROM json_object_keys(to_json(new_record)) AS X (key)
+          WHERE key = 'role'
+      ) THEN
+        IF NEW.role <> OLD.role THEN
+          UPDATE auth.user_roles
+            SET role = NEW.role
+            WHERE user_id = OLD.id
+          ;
+        END IF;
+      END IF;
+
       RETURN NEW;
 
     END;
