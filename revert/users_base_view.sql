@@ -2,7 +2,7 @@
 
 BEGIN;
 
-  DROP VIEW IF EXISTS auth.users_base;
   DROP VIEW IF EXISTS auth.users_attributes_base;
+  DROP VIEW IF EXISTS auth.users_base;
 
 COMMIT;
