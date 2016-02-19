@@ -80,6 +80,8 @@ BEGIN;
           RAISE foreign_key_violation USING message = 'Invalid email address: ' || new.email;
         END IF;
 
+        PERFORM auth.clearance_for_role(new.role);
+
         new.pass = crypt(new.pass, gen_salt('bf'));
         new.created_at = CURRENT_TIMESTAMP;
         new.updated_at = CURRENT_TIMESTAMP;
@@ -163,6 +165,9 @@ BEGIN;
       END IF;
       IF new.pass != old.pass THEN
         new.pass = crypt(new.pass, gen_salt('bf'));
+      END IF;
+      IF new.role != old.role THEN
+        PERFORM auth.clearance_for_role(new.role);
       END IF;
 
       new.updated_at = CURRENT_TIMESTAMP;
