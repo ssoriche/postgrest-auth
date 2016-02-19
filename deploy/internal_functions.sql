@@ -4,6 +4,26 @@
 BEGIN;
   SET client_min_messages TO WARNING;
 
+  CREATE OR REPLACE FUNCTION auth.clearance_for_role(u name) RETURNS VOID AS $$
+    DECLARE
+      ok BOOLEAN;
+    BEGIN
+      SELECT EXISTS (
+        SELECT rolname
+          FROM pg_authid
+          WHERE pg_has_role(current_user, oid, 'member')
+            AND rolname = u
+        ) INTO ok
+      ;
+
+      IF NOT ok THEN
+        RAISE invalid_password
+          USING message = 'current user not member of role ' || u
+        ;
+      END IF;
+    END
+  $$ LANGUAGE plpgsql;
+
   CREATE OR REPLACE FUNCTION auth.check_role_exists() RETURNS trigger
     language plpgsql
     as $$

@@ -7,5 +7,6 @@ BEGIN;
   SELECT has_function_privilege('auth.users_add()', 'execute');
   SELECT has_function_privilege('auth.users_change()', 'execute');
   SELECT has_function_privilege('auth.user_role(text, text)', 'execute');
+  SELECT has_function_privilege('auth.clearance_for_role(name)', 'execute');
 
 ROLLBACK;
