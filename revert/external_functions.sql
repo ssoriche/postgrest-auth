@@ -7,5 +7,6 @@ BEGIN;
   DROP FUNCTION IF EXISTS auth.signup(TEXT, TEXT, TEXT, TEXT);
   DROP FUNCTION IF EXISTS auth.login(TEXT, TEXT, INTEGER, OUT auth.jwt_claims);
   DROP FUNCTION IF EXISTS auth.confirm(UUID);
+  DROP FUNCTION IF EXISTS auth.change_password(TEXT, TEXT, TEXT, TEXT);
 
 COMMIT;

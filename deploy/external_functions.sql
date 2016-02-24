@@ -95,4 +95,24 @@ BEGIN;
     ;
   $$ LANGUAGE SQL;
 
+  CREATE OR REPLACE FUNCTION auth.change_password(identifier TEXT, current_password TEXT, new_password TEXT, confirm_password TEXT) RETURNS void AS $$
+    BEGIN
+      IF EXISTS(
+        SELECT 1 from auth.users
+        WHERE change_password.identifier IN (username, email)
+          AND users.pass = crypt(change_password.current_password, users.pass)
+          AND change_password.new_password = change_password.confirm_password
+      ) THEN
+        UPDATE auth.users
+          SET pass = change_password.new_password
+          WHERE change_password.identifier IN (username, email)
+            AND users.pass = crypt(change_password.current_password, users.pass)
+            AND change_password.new_password = change_password.confirm_password
+        ;
+      ELSE
+        RAISE invalid_password USING message = 'invalid password';
+      END IF;
+    END;
+  $$ language plpgsql;
+
 COMMIT;
