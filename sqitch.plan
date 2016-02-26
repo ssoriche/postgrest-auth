@@ -10,3 +10,4 @@ user_roles [users_base_view auth_schema] 2016-01-17T00:06:33Z Shawn Sorichetti <
 users_view [users_base_view user_roles] 2016-01-03T01:38:00Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add a users view to be used for authentication
 internal_functions [users_view] 2016-01-17T00:45:02Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add functions to deal with authentication
 external_functions [internal_functions] 2016-02-15T19:06:15Z Shawn Sorichetti <ssoriche@Ravage.coloredblocks.net> # Add login specific function
+api_auth_functions [external_functions] 2016-02-25T01:53:29Z Shawn Sorichetti <ssoriche@Ravage.coloredblocks.net> # Add API functions for auth
