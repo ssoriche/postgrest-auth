@@ -42,11 +42,11 @@ BEGIN;
         RAISE invalid_password USING message = 'invalid user or token';
       END IF;
     END;
-  $$ LANGUAGE plpgsql;
+  $$ LANGUAGE plpgsql SECURITY DEFINER;
 
   CREATE OR REPLACE FUNCTION auth.signup(username TEXT, email TEXT, pass TEXT, role TEXT) RETURNS VOID AS $$
     INSERT INTO auth.users (username, email, pass, role) VALUES (signup.username, signup.email, signup.pass, signup.role);
-  $$ LANGUAGE SQL;
+  $$ LANGUAGE SQL SECURITY DEFINER;
 
   CREATE OR REPLACE FUNCTION auth.login(identifier TEXT, pass TEXT, exp INTEGER=NULL) RETURNS auth.jwt_claims AS $$
     DECLARE
@@ -85,7 +85,7 @@ BEGIN;
 
       RETURN result;
     END;
-  $$ language plpgsql;
+  $$ language plpgsql SECURITY DEFINER;
 
   CREATE OR REPLACE FUNCTION auth.confirm(token UUID) RETURNS VOID AS $$
     UPDATE auth.users
@@ -93,7 +93,7 @@ BEGIN;
         confirmed_at=CURRENT_TIMESTAMP
       WHERE users.confirmation_token = confirm.token::TEXT
     ;
-  $$ LANGUAGE SQL;
+  $$ LANGUAGE SQL SECURITY DEFINER;
 
   CREATE OR REPLACE FUNCTION auth.change_password(identifier TEXT, current_password TEXT, new_password TEXT, confirm_password TEXT) RETURNS void AS $$
     BEGIN
@@ -113,6 +113,6 @@ BEGIN;
         RAISE invalid_password USING message = 'invalid password';
       END IF;
     END;
-  $$ language plpgsql;
+  $$ language plpgsql SECURITY DEFINER;
 
 COMMIT;
