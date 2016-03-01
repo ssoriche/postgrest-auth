@@ -21,6 +21,19 @@ BEGIN;
       IF NOT EXISTS (
         SELECT *
           FROM pg_catalog.pg_roles
+          WHERE rolname = 'member'
+      ) THEN
+        CREATE ROLE member;
+     END IF;
+  END
+  $body$;
+
+  DO
+  $body$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT *
+          FROM pg_catalog.pg_roles
           WHERE rolname = 'authenticator'
       ) THEN
         CREATE ROLE authenticator noinherit;
@@ -29,6 +42,7 @@ BEGIN;
   $body$;
 
   GRANT ANON to authenticator;
+  GRANT anon to member;
 
   GRANT USAGE ON SCHEMA public, auth TO anon;
 
@@ -41,6 +55,11 @@ BEGIN;
       signup(TEXT, TEXT),
       confirm(UUID),
       login(TEXT, TEXT)
+    TO anon
+  ;
+
+  GRANT EXECUTE ON FUNCTION
+      change_password(TEXT, TEXT, TEXT, TEXT)
     TO anon
   ;
 
