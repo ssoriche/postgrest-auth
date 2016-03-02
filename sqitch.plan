@@ -3,7 +3,7 @@
 %uri=https://github.com/ssoriche/postgrest-auth/
 
 setup 2015-12-28T21:40:57Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # setup database for authentication
-devise_test 2015-12-29T02:28:36Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # setup database for Devise layout
+backend_devise 2015-12-29T02:28:36Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # setup database for Devise layout
 auth_schema 2015-12-30T03:36:42Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add auth schema to hold auth objects
 users_base_view [auth_schema] 2015-12-30T22:09:21Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add a base users view to build from
 user_roles [users_base_view auth_schema] 2016-01-17T00:06:33Z Shawn Sorichetti <ssoriche@Ravage.hide.sackheads.org> # Add user_roles table to add a role to the users table
