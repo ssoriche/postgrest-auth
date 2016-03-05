@@ -96,7 +96,7 @@ BEGIN;
         ;
 
         IF EXISTS ( SELECT 1 FROM json_each_text(to_json(new_record)) AS X WHERE key = 'confirmation_token') THEN
-          new_record.confirmation_token = uuid_generate_v4();
+          new_record.confirmation_token = gen_random_uuid();
           new_record.confirmation_sent_at = CURRENT_TIMESTAMP;
 
           PERFORM pg_notify('validate',
