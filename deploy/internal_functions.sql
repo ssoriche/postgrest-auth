@@ -64,6 +64,15 @@ BEGIN;
     execute procedure auth.check_user_exists()
   ;
 
+  CREATE OR REPLACE FUNCTION auth.record_key_exists(JSON,TEXT) RETURNS BOOLEAN AS $$
+    DECLARE
+      ret BOOLEAN;
+    BEGIN
+      SELECT EXISTS ( SELECT 1 FROM json_each_text($1) AS X WHERE key = $2::TEXT) INTO ret;
+      RETURN ret;
+    END;
+  $$ LANGUAGE plpgsql;
+
   CREATE OR REPLACE FUNCTION auth.users_add() RETURNS trigger AS $auth_users_add$
     DECLARE
       inputstring TEXT;
