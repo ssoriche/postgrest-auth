@@ -21,7 +21,7 @@ BEGIN;
           USING message = 'current user not member of role ' || u
         ;
       END IF;
-    END
+    END;
   $$ LANGUAGE plpgsql;
 
   CREATE OR REPLACE FUNCTION auth.check_role_exists() RETURNS trigger
@@ -34,7 +34,7 @@ BEGIN;
       RETURN null;
     END IF;
     RETURN new;
-  END
+  END;
   $$;
 
   DROP TRIGGER IF EXISTS ensure_user_role_exists ON auth.user_roles;
@@ -54,7 +54,7 @@ BEGIN;
       RETURN null;
     END IF;
     RETURN new;
-  END
+  END;
   $$;
 
   DROP TRIGGER IF EXISTS ensure_user_user_exists ON auth.user_roles;
