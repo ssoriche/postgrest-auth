@@ -225,4 +225,35 @@ BEGIN;
   DROP TYPE IF EXISTS auth.jwt_claims CASCADE;
   CREATE TYPE auth.jwt_claims AS (role TEXT, user_id INTEGER, username TEXT, email TEXT, exp BIGINT);
 
+  CREATE OR REPLACE FUNCTION auth.update_sign_in_attributes(user_id INTEGER) RETURNS void AS $$
+    DECLARE
+      updatecolumns TEXT[] DEFAULT '{}';
+    BEGIN
+      IF EXISTS (SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'auth'
+          AND table_name = 'users'
+          AND column_name = 'sign_in_count'
+      ) THEN
+        updatecolumns := updatecolumns || 'sign_in_count = COALESCE(sign_in_count,0) + 1'::TEXT;
+
+      END IF;
+
+      IF EXISTS (SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'auth'
+          AND table_name = 'users'
+          AND column_name = 'current_sign_in_at'
+      ) THEN
+        updatecolumns := updatecolumns || 'current_sign_in_at = CURRENT_TIMESTAMP'::TEXT;
+      END IF;
+
+      IF array_length(updatecolumns,1) > 0 THEN
+        EXECUTE 'UPDATE auth.users SET ' ||  array_to_string(updatecolumns,', ')
+          || ' WHERE id = $1' USING update_sign_in_attributes.user_id
+        ;
+      END IF;
+    END;
+  $$ LANGUAGE plpgsql;
+
 COMMIT;
