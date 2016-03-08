@@ -178,8 +178,12 @@ BEGIN;
         new.confirmation_sent_at = CURRENT_TIMESTAMP;
       END IF;
       IF new.sign_in_count != old.sign_in_count OR (new.sign_in_count IS NOT NULL AND old.sign_in_count IS NULL) THEN
-        new.last_sign_in_at = old.current_sign_in_at;
-        new.last_sign_in_ip = old.current_sign_in_ip;
+        IF auth.record_key_exists(to_json(new),'last_sign_in_at') AND auth.record_key_exists(to_json(old),'current_sign_in_at') THEN
+          new.last_sign_in_at = old.current_sign_in_at;
+        END IF;
+        IF auth.record_key_exists(to_json(new),'last_sign_in_ip') AND auth.record_key_exists(to_json(old),'current_sign_in_ip') THEN
+          new.last_sign_in_ip = old.current_sign_in_ip;
+        END IF;
         new.current_sign_in_at = CURRENT_TIMESTAMP;
       END IF;
       IF new.pass != old.pass THEN
