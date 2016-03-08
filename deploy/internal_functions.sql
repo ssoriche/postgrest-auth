@@ -81,11 +81,21 @@ BEGIN;
     BEGIN
       IF tg_op = 'INSERT' THEN
 
-        IF EXISTS (SELECT 1 FROM auth.users WHERE username = new.username) THEN
+        new_record = json_populate_record(
+            null::auth.users_attributes_base, to_json(NEW)
+          )
+        ;
+
+        IF auth.record_key_exists(to_json(new_record), 'username')
+            AND EXISTS (SELECT 1 FROM auth.users WHERE username = new.username)
+        THEN
           RAISE foreign_key_violation USING message = 'Invalid user name: ' || new.username;
         END IF;
 
-        IF EXISTS (SELECT 1 FROM auth.users WHERE email = new.email) THEN
+
+        IF auth.record_key_exists(to_json(new_record), 'email')
+            AND EXISTS (SELECT 1 FROM auth.users WHERE email = new.email)
+        THEN
           RAISE foreign_key_violation USING message = 'Invalid email address: ' || new.email;
         END IF;
 
