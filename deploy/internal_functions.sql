@@ -28,7 +28,7 @@ BEGIN;
     language plpgsql
     as $$
   BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_roles AS r WHERE r.rolname = new.role) THEN
+    IF NOT auth.check_role_exists(new.role) THEN
       raise foreign_key_violation using message =
         'unknown database role: ' || new.role;
       RETURN null;
@@ -171,10 +171,11 @@ BEGIN;
           INTO ret USING new_record
         ;
 
-        IF NOT EXISTS ( SELECT 1 FROM json_each_text(to_json(new_record)) AS X WHERE key = 'role') THEN
+        IF NOT auth.record_key_exists(to_json(new_record), 'role') THEN
           INSERT INTO auth.user_roles (user_id, role)
             VALUES (ret.ID, NEW.role)
           ;
+        ELSE
         END IF;
       END IF;
 
