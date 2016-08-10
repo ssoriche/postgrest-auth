@@ -37,12 +37,37 @@ BEGIN;
   END;
   $$;
 
-  DROP TRIGGER IF EXISTS ensure_user_role_exists ON auth.user_roles;
-  CREATE CONSTRAINT TRIGGER ensure_user_role_exists
-    AFTER INSERT or UPDATE on auth.user_roles
-    for each row
-    execute procedure auth.check_role_exists()
-  ;
+  CREATE OR REPLACE FUNCTION auth.check_role_exists(role TEXT) RETURNS BOOLEAN
+    language plpgsql
+    as $$
+  BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_roles AS r WHERE r.rolname = check_role_exists.role) THEN
+      raise foreign_key_violation using message =
+        'unknown database role: ' || check_role_exists.role;
+      RETURN FALSE;
+    END IF;
+    RETURN TRUE;
+  END;
+  $$;
+
+  DO
+  $body$
+    BEGIN
+      IF EXISTS (
+        SELECT *
+          FROM pg_catalog.pg_tables
+          WHERE schemaname = 'auth'
+            AND tablename = 'user_roles'
+      ) THEN
+        DROP TRIGGER IF EXISTS ensure_user_role_exists ON auth.user_roles;
+        CREATE CONSTRAINT TRIGGER ensure_user_role_exists
+          AFTER INSERT or UPDATE on auth.user_roles
+          for each row
+          execute procedure auth.check_role_exists()
+        ;
+     END IF;
+  END
+  $body$;
 
   CREATE OR REPLACE FUNCTION auth.check_user_exists() RETURNS trigger
     language plpgsql
@@ -57,12 +82,24 @@ BEGIN;
   END;
   $$;
 
-  DROP TRIGGER IF EXISTS ensure_user_user_exists ON auth.user_roles;
-  CREATE CONSTRAINT TRIGGER ensure_user_user_exists
-    AFTER INSERT or UPDATE on auth.user_roles
-    for each row
-    execute procedure auth.check_user_exists()
-  ;
+  DO
+  $body$
+    BEGIN
+      IF EXISTS (
+        SELECT *
+          FROM pg_catalog.pg_tables
+          WHERE schemaname = 'auth'
+            AND tablename = 'user_roles'
+      ) THEN
+        DROP TRIGGER IF EXISTS ensure_user_user_exists ON auth.user_roles;
+        CREATE CONSTRAINT TRIGGER ensure_user_user_exists
+          AFTER INSERT or UPDATE on auth.user_roles
+          for each row
+          execute procedure auth.check_user_exists()
+        ;
+     END IF;
+  END
+  $body$;
 
   CREATE OR REPLACE FUNCTION auth.record_key_exists(JSON,TEXT) RETURNS BOOLEAN AS $$
     DECLARE
