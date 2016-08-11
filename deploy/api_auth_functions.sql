@@ -29,7 +29,7 @@ BEGIN;
 
   CREATE OR REPLACE FUNCTION public.confirm(token UUID) RETURNS VOID AS $$
     BEGIN
-      PERFORM auth.confirm(confirm.token);
+      PERFORM auth.confirm(confirm.token, 'member');
     END;
   $$ LANGUAGE plpgsql;
 
