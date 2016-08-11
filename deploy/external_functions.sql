@@ -84,10 +84,11 @@ BEGIN;
     END;
   $$ language plpgsql SECURITY DEFINER;
 
-  CREATE OR REPLACE FUNCTION auth.confirm(token UUID) RETURNS VOID AS $$
+  CREATE OR REPLACE FUNCTION auth.confirm(token UUID, role TEXT) RETURNS VOID AS $$
     UPDATE auth.users
       SET confirmation_token=NULL,
-        confirmed_at=CURRENT_TIMESTAMP
+        confirmed_at=CURRENT_TIMESTAMP,
+        role = confirm.role
       WHERE users.confirmation_token = confirm.token::TEXT
     ;
   $$ LANGUAGE SQL SECURITY DEFINER;
