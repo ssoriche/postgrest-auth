@@ -15,6 +15,12 @@ BEGIN;
     END;
   $$ LANGUAGE plpgsql;
 
+  CREATE OR REPLACE FUNCTION public.signup(userid TEXT, email TEXT, pass TEXT) RETURNS VOID AS $$
+    BEGIN
+      PERFORM auth.signup(signup.userid, signup.email, signup.pass, 'unverified');
+    END;
+  $$ LANGUAGE plpgsql;
+
   CREATE OR REPLACE FUNCTION public.signup(email TEXT, pass TEXT) RETURNS VOID AS $$
     BEGIN
       PERFORM auth.signup(signup.email, signup.email, signup.pass, 'unverified');

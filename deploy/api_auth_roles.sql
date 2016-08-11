@@ -53,6 +53,7 @@ BEGIN;
       request_password_reset(TEXT),
       reset_password(TEXT, UUID, TEXT),
       signup(TEXT, TEXT),
+      signup(TEXT, TEXT, TEXT),
       confirm(UUID),
       login(TEXT, TEXT)
     TO anon
